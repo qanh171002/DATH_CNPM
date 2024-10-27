@@ -23,13 +23,13 @@ export async function getAll(table) {
   });
 }
 
-export function insertSingleRow(table, data = {}) {
+export async function insertSingleRow(table, data = {}) {
   const fields = Object.keys(data).join(", ");
-  const values = Object.values(data).join(", ");
+  const placeholders = Object.keys(data).map(() => "?").join(", ");
 
-  let query = `INSERT INTO ${table} (${fields}) VALUES (${values});`;
+  let query = `INSERT INTO ${table} (${fields}) VALUES (${placeholders});`;
 
-  connection.query(query, (err) => {
+  connection.query(query, Object.values(data), (err) => {
     if (err) throw err;
   });
 }
@@ -45,6 +45,24 @@ export async function insertMultipleRows(table, rows = []) {
   const values = rows.reduce((acc, row) => acc.concat(Object.values(row)), []);
 
   connection.query(query, values, (err) => {
+    if (err) throw err;
+  });
+}
+
+export async function updateRow(id, table, data) {
+  return new Promise((resolve, reject) => {
+    let query = `UPDATE ${table} SET ? WHERE id='${id}'`;
+
+    connection.query(query, [data], (err, row) => {
+      if (err) reject(err);
+      resolve(row);
+    });
+  });
+}
+
+export async function deleteRow(id, table) {
+  let query = `DELETE FROM ${table} WHERE id='${id}'`;
+  connection.query(query, function (err) {
     if (err) throw err;
   });
 }

@@ -13,8 +13,8 @@ async function getProduct(req, res) {
 
 async function createProduct(req, res) {
   try {
-    await ProductModel.createProduct();
-    res.status(StatusCodes.OK).json();
+    await ProductModel.createProduct(req.body);
+    res.status(StatusCodes.CREATED).json("Created");
 
   } catch (error) {
     throw new Error(error);
@@ -23,8 +23,9 @@ async function createProduct(req, res) {
 
 async function editProduct(req, res) {
   try {
-    await ProductModel.createProduct();
-    res.status(StatusCodes.OK).json();
+    let editedProduct = await ProductModel.editProduct(req.params.id, req.body);
+
+    res.status(StatusCodes.OK).json(editedProduct);
 
   } catch (error) {
     throw new Error(error);
@@ -33,8 +34,8 @@ async function editProduct(req, res) {
 
 async function deleteProduct(req, res) {
   try {
-    await ProductModel.createProduct();
-    res.status(StatusCodes.OK).json();
+    await ProductModel.deleteProduct(req.params.id);
+    res.status(StatusCodes.OK).json("Deleted");
 
   } catch (error) {
     throw new Error(error);

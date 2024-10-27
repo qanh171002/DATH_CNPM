@@ -1,6 +1,18 @@
 /* eslint-disable quotes */
 import { connection } from "~/config/connectDatabase";
 
+
+export async function getOne(table, id) {
+  return new Promise((resolve, reject) => {
+    let query = `SELECT * FROM ${table} WHERE id='${id}'`;
+    connection.query(query, (err, row) => {
+      if (err) return reject(err);
+
+      resolve(row);
+    });
+  });
+}
+
 export async function getAll(table) {
   return new Promise((resolve, reject) => {
     let query = `SELECT * FROM ${table}`;

@@ -1,10 +1,10 @@
 import express from "express";
-import { HomeController } from "~/controllers/HomeController";
+import { CouponController } from "~/controllers/CouponController";
 
 const router = express.Router();
 
 router.route("/")
-  .get(HomeController.getProducts)
-  .post(HomeController.createProduct);
+  .get(CouponController.getProducts)
+  .post(CouponController.createProduct);
 
 export const CouponRoutes = router;

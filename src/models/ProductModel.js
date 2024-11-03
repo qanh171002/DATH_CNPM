@@ -1,5 +1,4 @@
-import { products } from "~/utilities/generateData";
-import { getOne, insertMultipleRows } from "~/database/query";
+import { deleteRow, getOne, insertSingleRow, updateRow } from "~/database/query";
 
 async function getProduct(id) {
   let products = await getOne("products", id)
@@ -13,19 +12,18 @@ async function getProduct(id) {
   return products;
 }
 
-async function createProduct() {
-  let data = products;
-  await insertMultipleRows("products", data);
+async function createProduct(product) {
+  await insertSingleRow("products", product);
 }
 
-async function editProduct() {
-  let data = products;
-  await insertMultipleRows("products", data);
+async function editProduct(id, data) {
+  let editedProduct = await updateRow(id, "products", data);
+
+  return editedProduct;
 }
 
-async function deleteProduct() {
-  let data = products;
-  await insertMultipleRows("products", data);
+async function deleteProduct(id) {
+  await deleteRow(id, "products");
 }
 
 export const ProductModel = {

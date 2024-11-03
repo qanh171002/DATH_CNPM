@@ -13,7 +13,6 @@ async function getProduct(id) {
   return products;
 }
 
-// just for test
 async function createProduct() {
   let data = products;
   await insertMultipleRows("products", data);

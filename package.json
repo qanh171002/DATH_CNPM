@@ -1,0 +1,44 @@
+{
+  "name": "ecommerce_be",
+  "version": "1.0.0",
+  "description": "Ecommerce project",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "cross-env BUILD_MODE=dev nodemon --exec babel-node ./src/index.js",
+    "clean": "rimraf build && mkdir build",
+    "build-babel": "babel ./src -d ./build/src",
+    "build": "npm run clean && cross-env BUILD_MODE=production && npm run build-babel",
+    "production": "npm run build && node ./build/src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "e-commerce",
+    "SE",
+    "project"
+  ],
+  "author": "Wir and Haloed",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.25.7",
+    "@babel/core": "^7.25.8",
+    "@babel/node": "^7.25.7",
+    "@babel/plugin-transform-runtime": "^7.25.7",
+    "@babel/preset-env": "^7.25.8",
+    "@eslint/js": "^9.13.0",
+    "@faker-js/faker": "^9.0.3",
+    "babel-plugin-module-resolver": "^5.0.2",
+    "eslint": "^9.13.0",
+    "eslint-plugin-react": "^7.37.1",
+    "globals": "^15.11.0",
+    "http-status-codes": "^2.3.0",
+    "nodemon": "^3.1.7"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.25.7",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.11.3"
+  }
+}

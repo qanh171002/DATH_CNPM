@@ -1,5 +1,5 @@
-import { HomeModel } from "~/models/HomeModel";
-import { StatusCodes } from "http-status-codes";
+import { HomeModel } from '~/models/HomeModel';
+import { StatusCodes } from 'http-status-codes';
 
 async function getProducts(req, res) {
   try {

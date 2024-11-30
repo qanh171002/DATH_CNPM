@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import "dotenv/config";
+import 'dotenv/config';
 
 export const env = {
   APP_HOST: process.env.APP_HOST,

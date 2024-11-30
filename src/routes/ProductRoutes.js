@@ -1,12 +1,12 @@
-import express from "express";
-import { ProductController } from "~/controllers/ProductController";
+import express from 'express';
+import { ProductController } from '~/controllers/ProductController';
 
 const router = express.Router();
 
-router.route("/add")
+router.route('/add')
   .post(ProductController.createProduct);
 
-router.route("/:id")
+router.route('/:id')
   .get(ProductController.getProduct)
   .put(ProductController.editProduct)
   .delete(ProductController.deleteProduct);

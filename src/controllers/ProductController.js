@@ -1,5 +1,5 @@
-import { ProductModel } from "~/models/ProductModel";
-import { StatusCodes } from "http-status-codes";
+import { ProductModel } from '~/models/ProductModel';
+import { StatusCodes } from 'http-status-codes';
 
 async function getProduct(req, res) {
   try {
@@ -14,7 +14,7 @@ async function getProduct(req, res) {
 async function createProduct(req, res) {
   try {
     await ProductModel.createProduct(req.body);
-    res.status(StatusCodes.CREATED).json("Created");
+    res.status(StatusCodes.CREATED).json('Created');
 
   } catch (error) {
     throw new Error(error);
@@ -35,16 +35,28 @@ async function editProduct(req, res) {
 async function deleteProduct(req, res) {
   try {
     await ProductModel.deleteProduct(req.params.id);
-    res.status(StatusCodes.OK).json("Deleted");
+    res.status(StatusCodes.OK).json('Deleted');
 
   } catch (error) {
     throw new Error(error);
   }
 }
 
+async function handleQuantity(orderDetails) {
+  for (let i = 0; i < orderDetails.length; i++) {
+    const productId = orderDetails[i].product_id;
+    const quantity = orderDetails[i].quantity;
+
+    await ProductModel.editProduct(productId, { quantity: quantity });
+  }
+
+  return true;
+}
+
 export const ProductController = {
   getProduct,
   createProduct,
   editProduct,
-  deleteProduct
+  deleteProduct,
+  handleQuantity
 };

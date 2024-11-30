@@ -1,8 +1,8 @@
-import { products } from "~/utilities/generateData";
-import { getAll, insertMultipleRows } from "~/database/query";
+import { products } from '~/utilities/generateData';
+import { getAll, insertMultipleRows } from '~/database/query';
 
 async function getProducts() {
-  let products = await getAll("products")
+  let products = await getAll('products')
     .then((rows) => {
       return rows;
     })
@@ -16,7 +16,7 @@ async function getProducts() {
 // just for test
 async function createProduct() {
   let data = products;
-  await insertMultipleRows("products", data);
+  await insertMultipleRows('products', data);
 }
 
 export const HomeModel = {

@@ -1,5 +1,5 @@
-import mysql from "mysql";
-import { env } from "~/config/env";
+import mysql from 'mysql';
+import { env } from '~/config/env';
 
 export const connection = mysql.createConnection({
   host: env.DB_HOST,

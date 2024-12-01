@@ -1,5 +1,14 @@
 import { connection } from '~/config/connectDatabase';
 
+export async function excuteQuery(query) {
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, row) => {
+      if (err) return reject(err);
+
+      resolve(row);
+    });
+  });
+}
 
 export async function getOne(table, where = {}, join = []) {
   return new Promise((resolve, reject) => {
@@ -20,7 +29,6 @@ export async function getOne(table, where = {}, join = []) {
     });
   });
 }
-
 
 export async function getAll(table) {
   return new Promise((resolve, reject) => {

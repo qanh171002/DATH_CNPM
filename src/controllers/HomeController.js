@@ -1,9 +1,10 @@
 import { HomeModel } from '~/models/HomeModel';
 import { StatusCodes } from 'http-status-codes';
+import { ProductModel } from '~/models/ProductModel';
 
 async function getProducts(req, res) {
   try {
-    const products = await HomeModel.getProducts();
+    const products = await ProductModel.getProductDetails();
 
     res.status(StatusCodes.OK).json(products);
   } catch (error) {

@@ -3,9 +3,17 @@ import { StatusCodes } from 'http-status-codes';
 
 async function getCoupons(req, res) {
   try {
-    const coupon = await CouponModel.getCoupons(req.params.id);
+    const coupons = await CouponModel.getCoupons(req.params.id);
 
-    res.status(StatusCodes.OK).json(coupon);
+    const updatedCoupons = coupons.map(coupon => {
+      const { name, ...rest } = coupon;
+      return {
+        ...rest,
+        code: name
+      };
+    });
+
+    res.status(StatusCodes.OK).json(updatedCoupons);
   } catch (error) {
     throw new Error(error);
   }

@@ -7,6 +7,6 @@ export const generateAccessJWT = (id) => {
   };
 
   return jwt.sign(payload, env.SECRET_ACCESS_TOKEN, {
-    expiresIn: '60m'
+    expiresIn: '180m'
   });
 };

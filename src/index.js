@@ -4,13 +4,15 @@ import cors from 'cors';
 import { env } from '~/config/env';
 import { API } from '~/routes/index';
 import { connectToDB } from '~/config/connectDatabase';
+import cookieParser from 'cookie-parser';
 
 const SERVER = () => {
   const app = express();
 
+  app.use(cookieParser());
+
   var corsOptions = {
     origin: 'http://localhost:3000',
-    optionsSuccessStatus: 200,
     credentials: true
   };
 

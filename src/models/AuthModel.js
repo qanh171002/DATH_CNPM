@@ -67,7 +67,7 @@ const login = async (data, res) => {
     }
 
     let options = {
-      maxAge: 20 * 60 * 1000,
+      maxAge: 30 * 60 * 1000,
       httpOnly: true,
       secure: true,
       sameSite: 'None'

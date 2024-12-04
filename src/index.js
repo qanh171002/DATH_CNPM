@@ -11,19 +11,25 @@ const SERVER = () => {
 
   app.use(cookieParser());
 
+  app.use((req, res, next) => {
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+    next();
+  });
+
   var corsOptions = {
     origin: 'http://localhost:3000',
     credentials: true
   };
 
   app.use(cors(corsOptions));
-
   app.use(express.json());
+
   app.use('/api', API);
 
   if (env.BUILD_MODE == 'dev') {
     app.listen(env.APP_PORT, () => {
-      console.log(`Running on: http://${env.APP_HOST}:${env.APP_PORT}/api/home`);
+      console.log(`Running on: http://${env.APP_HOST}:${env.APP_PORT}/api`);
     });
   }
 };

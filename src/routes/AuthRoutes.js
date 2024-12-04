@@ -10,5 +10,6 @@ router.get('/protected', authentication, (res, req) => {
 router.post('/login', AuthController.login);
 router.post('/signup', AuthController.createUser);
 router.post('/logout', AuthController.logout);
+router.post('/google', AuthController.loginByGoogle);
 
 export const AuthRoutes = router;

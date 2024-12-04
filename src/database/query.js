@@ -42,6 +42,31 @@ export async function insertSingleRow(table, data = {}) {
   });
 }
 
+export async function insertSingleRowAndGetResult(table, data = {}) {
+  const fields = Object.keys(data).join(', ');
+  const placeholders = Object.keys(data).map(() => '?').join(', ');
+
+  let query = `INSERT INTO ${table} (${fields}) VALUES (${placeholders});`;
+
+  return new Promise((resolve, reject) => {
+    connection.query(query, Object.values(data), (err) => {
+      if (err) {
+        return reject(err);
+      }
+
+      const selectQuery = `SELECT * FROM ${table} WHERE id = ?`;
+      connection.query(selectQuery, [data.id], (err, rows) => {
+        if (err) {
+          return reject(err);
+        }
+
+        resolve(rows);
+      });
+    });
+  });
+}
+
+
 export async function insertMultipleRows(table, rows = []) {
   if (rows.length === 0) {
     throw new Error('No data to insert');

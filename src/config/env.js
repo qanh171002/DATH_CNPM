@@ -14,5 +14,7 @@ export const env = {
   APP_ID: process.env.APP_ID,
   KEY1: process.env.KEY1,
   KEY2: process.env.KEY2,
-  ENDPOINT: process.env.ENDPOINT
+  ENDPOINT: process.env.ENDPOINT,
+  GG_CLIENT_ID: process.env.GG_CLIENT_ID,
+  GG_CLIENT_SECRET: process.env.GG_CLIENT_SECRET
 };

@@ -10,18 +10,9 @@ export async function excuteQuery(query) {
   });
 }
 
-export async function getOne(table, where = {}, join = []) {
+export async function getOne(table, where_key, where_value) {
   return new Promise((resolve, reject) => {
-
-    const joinClause = join.length
-      ? join.map(({ table: joinTable, on }) => `JOIN ${joinTable} ON ${on}`).join(' ')
-      : '';
-
-    const whereClause = Object.entries(where)
-      .map(([key, value]) => `${key}='${value}'`)
-      .join(' AND ');
-
-    const query = `SELECT * FROM ${table} ${joinClause} ${whereClause ? `WHERE ${whereClause}` : ''}`;
+    let query = `SELECT * FROM ${table} WHERE ${where_key}='${where_value}'`;
     connection.query(query, (err, row) => {
       if (err) return reject(err);
 
@@ -40,7 +31,6 @@ export async function getAll(table) {
   });
 }
 
-
 export async function insertSingleRow(table, data = {}) {
   const fields = Object.keys(data).join(', ');
   const placeholders = Object.keys(data).map(() => '?').join(', ');
@@ -51,7 +41,6 @@ export async function insertSingleRow(table, data = {}) {
     if (err) throw err;
   });
 }
-
 
 export async function insertMultipleRows(table, rows = []) {
   if (rows.length === 0) {
@@ -68,12 +57,10 @@ export async function insertMultipleRows(table, rows = []) {
   });
 }
 
-
 export async function updateRow(table, conditions, data) {
   return new Promise((resolve, reject) => {
     const conditionStrings = Object.keys(conditions).map((key) => `${key} = ?`).join(' AND ');
     const dataKeys = Object.keys(data).map((key) => `${key} = ?`);
-
     const query = `UPDATE ?? SET ${dataKeys.join(', ')} WHERE ${conditionStrings}`;
     const values = [table, ...Object.values(data), ...Object.values(conditions)];
 
@@ -88,7 +75,6 @@ export async function updateRow(table, conditions, data) {
     });
   });
 }
-
 
 export async function deleteRow(table, conditions) {
   return new Promise((resolve, reject) => {

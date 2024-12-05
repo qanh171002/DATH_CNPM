@@ -7,7 +7,7 @@ router.route('/add')
   .post(ProductController.createProduct);
 
 router.route('/:id')
-  .get(ProductController.getProduct)
+  .get(ProductController.getProductReview)
   .put(ProductController.editProduct)
   .delete(ProductController.deleteProduct);
 

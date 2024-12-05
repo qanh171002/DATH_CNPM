@@ -5,6 +5,7 @@ import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import moment from 'moment';
 import { env } from '~/config/env';
+import { OrderController } from './OrderController';
 
 // APP INFO
 const config = {
@@ -14,24 +15,26 @@ const config = {
   endpoint: env.ENDPOINT
 };
 
+const public_url = "https://75d0-14-187-44-211.ngrok-free.app";
+
 const handleTransaction = async (req, res) => {
   const embed_data = {
-    redirecturl: 'http://wirxkano.kesug.com'
+    redirecturl: 'http://localhost:3000/status'
   };
 
-  const items = [{}];
+  const items = req.body.items || [{}];
   const transID = Math.floor(Math.random() * 1000000);
   const order = {
     app_id: config.app_id,
     app_trans_id: `${moment().format('YYMMDD')}_${transID}`, // translation missing: vi.docs.shared.sample_code.comments.app_trans_id
-    app_user: "user123",
+    app_user: req.body.userId || "user123",
     app_time: Date.now(), // miliseconds
     item: JSON.stringify(items),
     embed_data: JSON.stringify(embed_data),
-    amount: 50000,
+    amount: req.body.amount || 10000,
     description: `Green food - Payment for the order #${transID}`,
     bank_code: "",
-    callback_url: "https://cea3-14-187-44-211.ngrok-free.app/api/payment/callback"
+    callback_url: `${public_url}/api/payment/callback`
   };
 
   // appid|app_trans_id|appuser|amount|apptime|embeddata|item
@@ -68,6 +71,10 @@ const acceptTransaction = async (req, res) => {
       // thanh toán thành công
       // merchant cập nhật trạng thái cho đơn hàng
       let dataJson = JSON.parse(dataStr, config.key2);
+      const itemsArray = JSON.parse(dataJson["item"]);
+
+      await OrderController.createOrder(dataJson["app_user"], 'ACCEPTED', itemsArray, itemsArray.length, dataJson["amount"]);
+
       console.log("update order's status = success where app_trans_id =", dataJson["app_trans_id"]);
 
       result.return_code = 1;

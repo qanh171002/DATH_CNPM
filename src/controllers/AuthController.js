@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import { AuthModel } from '~/models/AuthModel';
 import { OAuth2Client } from 'google-auth-library';
 import { env } from '~/config/env';
-import { getOne, insertSingleRowAndGetResult } from '~/database/query';
+import { getOne, insertSingleRow, insertSingleRowAndGetResult } from '~/database/query';
 import { v4 as uuidv4 } from 'uuid';
 import { generateAccessJWT } from '~/utilities/generateAccessToken';
 
@@ -56,11 +56,13 @@ const loginByGoogle = async (req, res) => {
   let user = await getOne('users', 'email', email);
 
   if (user.length === 0) {
-    user = await insertSingleRowAndGetResult('users', { id: uuidv4(), email: email, name: name, role: 'BUYER' });
+    const id = uuidv4();
+    user = await insertSingleRowAndGetResult('users', { id: id, email: email, name: name, role: 'BUYER' });
+    await insertSingleRow('buyers', { user_id: id });
   }
 
   let options = {
-    maxAge: 30 * 60 * 1000,
+    maxAge: 180 * 60 * 1000,
     httpOnly: true,
     secure: true,
     sameSite: 'None'

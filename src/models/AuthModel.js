@@ -4,7 +4,7 @@ import { generateAccessJWT } from '~/utilities/generateAccessToken';
 import { v4 as uuidv4 } from 'uuid';
 
 const createUser = async (data) => {
-  const { email, password, confirmPassword, name, phone } = data;
+  const { email, password, confirmPassword, name, phone, role } = data;
 
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -40,7 +40,15 @@ const createUser = async (data) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  await insertSingleRow('users', { id: uuidv4(), email: email, password: hashedPassword, name: name, phone_number: phone });
+  const id = uuidv4();
+  await insertSingleRow('users', { id: id, email: email, password: hashedPassword, name: name, phone_number: phone, role: role });
+
+  let insertTable = 'buyers';
+  if (role === 'SELLER') {
+    insertTable = 'sellers';
+  }
+
+  await insertSingleRow(insertTable, { user_id: id });
 
   return { status: true, message: 'Create new user successfully!' };
 };

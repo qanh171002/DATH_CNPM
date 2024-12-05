@@ -1,9 +1,10 @@
 import { ProductModel } from '~/models/ProductModel';
 import { StatusCodes } from 'http-status-codes';
+import { excuteQuery } from '~/database/query';
 
-async function getProduct(req, res) {
+async function getProductReview(req, res) {
   try {
-    const product = await ProductModel.getProduct(req.params.id);
+    const product = await ProductModel.getProductReview(req.params.id);
 
     res.status(StatusCodes.OK).json(product);
   } catch (error) {
@@ -42,21 +43,22 @@ async function deleteProduct(req, res) {
   }
 }
 
-async function handleQuantity(orderDetails) {
-  for (let i = 0; i < orderDetails.length; i++) {
-    const productId = orderDetails[i].product_id;
-    const quantity = orderDetails[i].quantity;
+async function updateProductStock(productId, quantity) {
+  const query = `
+    UPDATE products
+    SET quantity = quantity - ${quantity}
+    WHERE id = '${productId}' AND quantity >= ${quantity};
+  `;
 
-    await ProductModel.editProduct(productId, { quantity: quantity });
-  }
+  const result = await excuteQuery(query);
 
-  return true;
+  return result;
 }
 
 export const ProductController = {
-  getProduct,
+  getProductReview,
   createProduct,
   editProduct,
   deleteProduct,
-  handleQuantity
+  updateProductStock
 };

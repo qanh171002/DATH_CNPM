@@ -1,9 +1,10 @@
 import express from 'express';
 import { PaymentController } from '~/controllers/PaymentController';
+import { authentication } from '~/middlewares/verify';
 
 const router = express.Router();
 
-router.post('/', PaymentController.handleTransaction);
+router.post('/', authentication, PaymentController.handleTransaction);
 router.post('/callback', PaymentController.acceptTransaction);
 
 export const PaymentRoutes = router;

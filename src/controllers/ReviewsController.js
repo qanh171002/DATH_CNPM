@@ -14,7 +14,7 @@ async function createReview(req, res) {
   try {
     if (!req.body.rate || req.body.rate < 1 || req.body.rate > 5) {
       return res.status(StatusCodes.BAD_REQUEST).json({
-        error: 'Đánh giá phải nằm trong khoảng từ 1 đến 5',
+        error: 'Đánh giá phải nằm trong khoảng từ 1 đến 5'
       });
     }
     const order = await ReviewsModel.getOrderById(req.body.order_id);

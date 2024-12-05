@@ -1,10 +1,9 @@
 import express from 'express';
 import { OrderController } from '~/controllers/OrderController';
+import { authentication } from '~/middlewares/verify';
 
 const router = express.Router();
 
-router.route('/:buyer_id')
-  .get(OrderController.getOrders)
-  .post(OrderController.createOrder);
+router.get('/:buyerId', authentication, OrderController.getOrders);
 
 export const OrderRoutes = router;

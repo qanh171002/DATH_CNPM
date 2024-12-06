@@ -1,78 +1,99 @@
-import { getOne } from '~/database/query';
-import { connection } from '~/config/connectDatabase';
+import { insertSingleRow2, updateRow2, getOne2, deleteRow2, getAll2, excuteQuery } from '~/database/query';
+import { v4 as uuidv4 } from 'uuid';
 
-async function getCart(buyer_id) {
-  let cart = await getOne('cart', 'buyer_id', buyer_id)
-    .then((rows) => {
-      return rows;
-    })
-    .catch((err) => {
-      throw err;
-    });
-  return cart;
+async function getCartIDbyBuyerID(buyer_id) {
+  try {
+    const cart = await getOne2('carts', { buyer_id: buyer_id });
+    return cart || null;
+  } catch (error) {
+    throw new Error(`Faild to get cart by buyer_id: ${buyer_id} - ${error.message}`);
+  }
 }
 
-async function addProductToCart(buyerId, productId, quantity) {
-  return new Promise((resolve, reject) => {
-    const query = `
-      INSERT INTO cart (buyer_id, product_id, quantity)
-      VALUES ('${buyerId}', '${productId}', ${quantity})
-      ON DUPLICATE KEY UPDATE quantity = quantity + ${quantity};
-    `;
-    connection.query(query, (err, result) => {
-      if (err) return reject(err);
-      resolve(result);
-    });
-  });
+async function createCart(buyer_id) {
+  const newCartData = { id: `${uuidv4()}`, buyer_id };
+  return await insertSingleRow2('carts', newCartData);
 }
 
-async function removeProductFromCart(buyerId, productId) {
-  return new Promise((resolve, reject) => {
-    const query = `
-      DELETE FROM cart
-      WHERE buyer_id = '${buyerId}' AND product_id = '${productId}';
-    `;
-    connection.query(query, (err, result) => {
-      if (err) return reject(err);
-      resolve(result);
-    });
-  });
+async function getProductInCart(cart_id, product_id) {
+  const rows = await getOne2('cart_product', { cart_id, product_id });
+  return rows;
 }
 
-async function updateQuantity(buyerId, productId, quantity) {
-  return new Promise((resolve, reject) => {
-    const query = `
-      UPDATE cart
-      SET quantity = ${quantity}
-      WHERE buyer_id = '${buyerId}' AND product_id = '${productId}';
-    `;
-    connection.query(query, (err, result) => {
-      if (err) return reject(err);
-      resolve(result);
-    });
-  });
+async function addProductToCart(cart_id, product_id, quantity) {
+  const data = { cart_id, product_id, quantity };
+  return await insertSingleRow2('cart_product', data);
 }
 
-async function getTotal(buyerId) {
-  return new Promise((resolve, reject) => {
-    const query = `
-      SELECT SUM(p.price * c.quantity) AS total
-      FROM cart c
-      JOIN products p ON c.product_id = p.id
-      WHERE c.buyer_id = '${buyerId}';
-    `;
+async function updateProductQuantity(cart_id, product_id, quantity) {
+  const data = { quantity };
+  const where = { cart_id, product_id };
+  return await updateRow2('cart_product', data, where);
+}
 
-    connection.query(query, (err, result) => {
-      if (err) return reject(err);
-      resolve(result[0].total);
-    });
-  });
+async function removeProductFromCart(cart_id, product_id) {
+  const where = { cart_id, product_id };
+  return await deleteRow2('cart_product', where);
+}
+
+async function getProductsInCart(cart_id) {
+  try {
+    const rows = await getAll2('cart_product', { cart_id });
+
+    for (const row of rows) {
+      const productDetails = await getAll2('products', { id: row.product_id });
+      row.price = productDetails[0].price;
+    }
+    return rows;
+  } catch (error) {
+    throw new Error(`Failed to get products in cart: ${error.message}`);
+  }
+}
+
+async function getProductInCart2(cartId) {
+  const query = `
+    SELECT 
+        p.id,
+        p.name,
+        p.image,
+        p.price,
+        cp.quantity,
+        cp.checked,
+        s.name AS shopName,
+        s.id AS shopId,
+        c.name AS category
+    FROM 
+        cart_product cp
+    JOIN 
+        products p ON cp.product_id = p.id
+    JOIN 
+        users s ON p.seller_id = s.id
+    JOIN 
+        categories c ON p.category_id = c.id
+    WHERE 
+        cp.cart_id = '${cartId}';
+  `;
+
+  const products = await excuteQuery(query);
+
+  return products;
+}
+
+async function updateProductCheckedStatus(cart_id, product_id, checked) {
+  const data = { checked };
+  const where = { cart_id, product_id };
+
+  return await updateRow2('cart_product', data, where);
 }
 
 export const CartModel = {
-  getCart,
+  createCart,
+  getCartIDbyBuyerID,
+  getProductInCart,
   addProductToCart,
+  updateProductQuantity,
   removeProductFromCart,
-  updateQuantity,
-  getTotal
+  getProductsInCart,
+  getProductInCart2,
+  updateProductCheckedStatus
 };

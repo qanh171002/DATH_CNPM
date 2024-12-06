@@ -20,17 +20,17 @@ async function createReview(req, res) {
     const order = await ReviewsModel.getOrderById(req.body.order_id);
     if (!order || order.status !== 'Accepted') {
       return res.status(StatusCodes.BAD_REQUEST).json({
-        error: 'Chỉ được phép đăng nhận xét khi đơn hàng có trạng thái Accepted.',
+        error: 'Chỉ được phép đăng nhận xét khi đơn hàng có trạng thái Accepted.'
       });
     }
 
     await ReviewsModel.createReviews(req.body);
     res.status(StatusCodes.CREATED).json({
-      message: 'Đăng tải nhận xét về sản phẩm thành công',
+      message: 'Đăng tải nhận xét về sản phẩm thành công'
     });
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      error: `Lỗi khi tạo nhận xét: ${error.message}`,
+      error: `Lỗi khi tạo nhận xét: ${error.message}`
     });
   }
 }

@@ -5,6 +5,7 @@ import { env } from '~/config/env';
 import { getOne, insertSingleRow, insertSingleRowAndGetResult } from '~/database/query';
 import { v4 as uuidv4 } from 'uuid';
 import { generateAccessJWT } from '~/utilities/generateAccessToken';
+import { CartModel } from '~/models/CartModel';
 
 const createUser = async (req, res) => {
   try {
@@ -59,6 +60,7 @@ const loginByGoogle = async (req, res) => {
     const id = uuidv4();
     user = await insertSingleRowAndGetResult('users', { id: id, email: email, name: name, role: 'BUYER' });
     await insertSingleRow('buyers', { user_id: id });
+    await CartModel.createCart(id);
   }
 
   let options = {

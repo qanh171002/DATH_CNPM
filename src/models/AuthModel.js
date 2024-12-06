@@ -2,6 +2,7 @@ import { getOne, insertSingleRow } from '~/database/query';
 import bcrypt from 'bcryptjs';
 import { generateAccessJWT } from '~/utilities/generateAccessToken';
 import { v4 as uuidv4 } from 'uuid';
+import { CartModel } from './CartModel';
 
 const createUser = async (data) => {
   const { email, password, confirmPassword, name, phone, role } = data;
@@ -49,6 +50,7 @@ const createUser = async (data) => {
   }
 
   await insertSingleRow(insertTable, { user_id: id });
+  await CartModel.createCart(id);
 
   return { status: true, message: 'Create new user successfully!' };
 };

@@ -3,10 +3,11 @@ import { CartController } from '~/controllers/CartController';
 
 const router = express.Router();
 
-router.get('/:buyer_id', CartController.getCart);
-router.post('/add', CartController.addProduct);
+router.get('/:buyer_id', CartController.getCartIDbyBuyerID);
+router.post('/products', CartController.getProductsInCart);
+router.post('/add', CartController.addProducttoCart);
 router.put('/update-quantity', CartController.updateQuantity);
-router.delete('/remove', CartController.removeProduct);
+router.post('/remove', CartController.removeProduct);
 router.get('/total/:buyer_id', CartController.getTotal);
-
+router.post('/checked', CartController.getChecked);
 export const CartRoutes = router;

@@ -25,6 +25,7 @@ export async function getAll(table) {
   return new Promise((resolve, reject) => {
     let query = `SELECT * FROM ${table}`;
     connection.query(query, (err, rows) => {
+
       if (err) return reject(err);
       resolve(rows);
     });

@@ -1,4 +1,5 @@
 import { deleteRow, excuteQuery, insertSingleRow, updateRow } from '~/database/query';
+import { v4 as uuidv4 } from 'uuid';
 
 async function getProductReview(productId) {
   const query = `
@@ -29,7 +30,6 @@ async function getProductDetails() {
         p.name,
         p.price,
         p.description,
-        c.name AS category,
         p.quantity,
         u.name AS sellerName,
         COALESCE(AVG(r.rate), 0) AS rating,
@@ -38,12 +38,10 @@ async function getProductDetails() {
         products p
     JOIN
         users u ON p.seller_id = u.id
-    JOIN 
-        categories c ON p.category_id = c.id
     LEFT JOIN 
         reviews r ON p.id = r.product_id
     GROUP BY 
-        p.id, p.image, p.name, p.price, p.description, c.name, p.quantity, u.name;
+        p.id, p.image, p.name, p.price, p.description, p.quantity, u.name;
   `;
 
   const products = await excuteQuery(query);
@@ -52,7 +50,12 @@ async function getProductDetails() {
 }
 
 async function createProduct(product) {
-  await insertSingleRow('products', product);
+  const data = {
+    ...product,
+    id: uuidv4()
+  };
+
+  await insertSingleRow('products', data);
 }
 
 async function editProduct(id, data) {

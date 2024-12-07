@@ -14,7 +14,19 @@ async function getProductReview(req, res) {
 
 async function createProduct(req, res) {
   try {
-    await ProductModel.createProduct(req.body);
+    const fileData = req.file;
+
+    const { name, description, quantity, price, sellerId } = req.body;
+    const data = {
+      name,
+      description,
+      quantity,
+      price,
+      seller_id: sellerId,
+      image: fileData?.path
+    };
+
+    await ProductModel.createProduct(data);
     res.status(StatusCodes.CREATED).json('Created');
 
   } catch (error) {

@@ -7,9 +7,9 @@ async function getProducts() {
       return rows;
     })
     .catch((err) => {
+
       throw err;
     });
-
   return products;
 }
 

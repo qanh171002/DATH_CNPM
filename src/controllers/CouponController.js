@@ -50,9 +50,21 @@ async function deleteCoupon(req, res) {
   }
 }
 
+async function decreaseQuantity(req, res) {
+  try {
+    const { id } = req.body;
+    await CouponModel.decreaseQuantity(id);
+
+    res.status(StatusCodes.OK).json('Coupon used');
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
 export const CouponController = {
   getCoupons,
   createCoupon,
   editCoupon,
-  deleteCoupon
+  deleteCoupon,
+  decreaseQuantity
 };

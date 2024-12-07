@@ -12,4 +12,6 @@ router.route('/:id')
   .put(CouponController.editCoupon)
   .delete(CouponController.deleteCoupon);
 
+router.post('/decrease', CouponController.decreaseQuantity);
+
 export const CouponRoutes = router;

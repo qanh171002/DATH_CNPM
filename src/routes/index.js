@@ -10,10 +10,12 @@ import { UserRoutes } from '~/routes/UserRoutes';
 import { OrderRoutes } from '~/routes/OrderRoutes';
 import { CategoriesRoutes } from '~/routes/CategoryRoutes';
 import { SearchRoutes } from '~/routes/SearchRoutes';
+import { AdminRoutes } from './AdminRoutes';
 
 const router = express.Router();
 
 router.use('/auth', AuthRoutes);
+router.use('/admin', AdminRoutes);
 router.use('/home', HomeRoutes);
 router.use('/product', ProductRoutes);
 router.use('/cart', CartRoutes);

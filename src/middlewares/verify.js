@@ -5,15 +5,14 @@ import { env } from '~/config/env';
 
 export const authorization = (permission) => {
   return async (req, res, next) => {
-    const { user } = req.user;
-
+    const user = req.user;
     if (!user) {
       return res.status(StatusCodes.FORBIDDEN).json('You must login first.');
     }
 
     const { role } = user;
 
-    if (!permission.include(role)) {
+    if (!permission.includes(role)) {
       return res.status(StatusCodes.UNAUTHORIZED).json('You dont have permission to do this action.');
     }
 

@@ -1,4 +1,4 @@
-import { deleteRow, excuteQuery, getAll, insertSingleRow, updateRow } from '~/database/query';
+import { deleteRow, executeQuery, getAll, insertSingleRow, updateRow } from '~/database/query';
 
 async function getCoupons() {
   let coupons = await getAll('coupons')
@@ -34,7 +34,7 @@ async function decreaseQuantity(id) {
   WHERE id = '${id}' AND quantity > 0
   `;
 
-  const result = await excuteQuery(query);
+  const result = await executeQuery(query);
 
   return result;
 }

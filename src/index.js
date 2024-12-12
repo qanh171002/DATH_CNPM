@@ -3,8 +3,8 @@ import express from 'express';
 import cors from 'cors';
 import { env } from '~/config/env';
 import { API } from '~/routes/index';
-import { connectToDB } from '~/config/connectDatabase';
 import cookieParser from 'cookie-parser';
+import { connectToDB } from '~/config/connectDatabase';
 
 const SERVER = () => {
   const app = express();

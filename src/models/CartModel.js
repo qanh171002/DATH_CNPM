@@ -1,4 +1,4 @@
-import { insertSingleRow2, updateRow2, getOne2, deleteRow2, getAll2, excuteQuery } from '~/database/query';
+import { insertSingleRow2, updateRow2, getOne2, deleteRow2, getAll2, executeQuery } from '~/database/query';
 import { v4 as uuidv4 } from 'uuid';
 
 async function getCartIDbyBuyerID(buyer_id) {
@@ -68,13 +68,13 @@ async function getProductInCart2(cartId) {
         products p ON cp.product_id = p.id
     JOIN 
         users s ON p.seller_id = s.id
-    JOIN 
+    LEFT JOIN 
         categories c ON p.category_id = c.id
     WHERE 
         cp.cart_id = '${cartId}';
   `;
 
-  const products = await excuteQuery(query);
+  const products = await executeQuery(query);
 
   return products;
 }

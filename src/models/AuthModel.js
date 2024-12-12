@@ -62,7 +62,7 @@ const logout = async (req, res) => {
     sameSite: 'None'
   });
 
-  res.json({ message: 'You have been logged out.' });
+  return 1;
 };
 
 const login = async (data, res) => {

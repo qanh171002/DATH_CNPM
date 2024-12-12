@@ -1,13 +1,13 @@
-import { connection } from '~/config/connectDatabase';
+import { connection, queryAsync } from '~/config/connectDatabase';
 
-export async function excuteQuery(query) {
-  return new Promise((resolve, reject) => {
-    connection.query(query, (err, row) => {
-      if (err) return reject(err);
+export async function executeQuery(query) {
+  try {
+    const result = await queryAsync(query);
 
-      resolve(row);
-    });
-  });
+    return result;
+  } catch (error) {
+    throw new Error(error);
+  }
 }
 
 export async function getOne(table, where_key, where_value) {
@@ -16,7 +16,7 @@ export async function getOne(table, where_key, where_value) {
     connection.query(query, (err, row) => {
       if (err) return reject(err);
 
-      resolve(row);
+      return resolve(row);
     });
   });
 }
@@ -118,7 +118,7 @@ export async function deleteRow(table, conditions) {
 
 //..................................Các hàm query xài cho cart: sẽ fix sau...............
 
-export async function excuteQuery2(query) {
+export async function executeQuery2(query) {
   return new Promise((resolve, reject) => {
     connection.query(query, (err, row) => {
       if (err) return reject(err);

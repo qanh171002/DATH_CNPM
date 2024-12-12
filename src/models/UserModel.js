@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { deleteRow, excuteQuery, getOne, insertSingleRow } from '~/database/query';
+import { deleteRow, executeQuery, getOne, insertSingleRow } from '~/database/query';
 
 async function getInfo(id) {
   let user = await getOne('users', 'id', id)
@@ -30,7 +30,7 @@ async function getAddress(userId) {
       addresses AS a
     WHERE a.user_id = '${userId}';
   `;
-  const result = await excuteQuery(query);
+  const result = await executeQuery(query);
 
   return result;
 }

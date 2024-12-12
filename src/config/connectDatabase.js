@@ -1,5 +1,6 @@
 import mysql from 'mysql';
 import { env } from '~/config/env';
+import { promisify } from 'util';
 
 export const connection = mysql.createConnection({
   host: env.DB_HOST,
@@ -8,6 +9,9 @@ export const connection = mysql.createConnection({
   database: env.DB_NAME
 });
 
+const connectAsynce = promisify(connection.connect).bind(connection);
+export const queryAsync = promisify(connection.query).bind(connection);
+
 export const connectToDB = async () => {
-  await connection.connect();
+  await connectAsynce();
 };

@@ -15,11 +15,12 @@ async function getOrders(req, res) {
 
 async function createOrder(buyerId, status, items, numberOfProducts, amount) {
   try {
-    const order = await OrderModel.createOrder(buyerId, status, numberOfProducts, amount);
+    const order = await OrderModel.createOrder(buyerId, numberOfProducts, amount);
     const orderDetails = items.map(item => ({
       order_id: order.id,
       product_id: item.id,
-      quantity: item.quantity
+      quantity: item.quantity,
+      status: status
     }));
 
     await OrderModel.storeOrderDetails(orderDetails);

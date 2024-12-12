@@ -18,8 +18,13 @@ const createUser = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    const result = await AuthModel.logout(req);
-    return res.status(StatusCodes.OK).json(result);
+    const result = await AuthModel.logout(req, res);
+
+    if (result) {
+      return res.status(StatusCodes.OK).json({ message: 'Logged out' });
+    }
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Fail to' });
+
   } catch (err) {
     return res.status(StatusCodes.BAD_GATEWAY).json({ status: false, error: err });
   };

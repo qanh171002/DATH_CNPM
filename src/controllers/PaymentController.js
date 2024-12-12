@@ -73,7 +73,7 @@ const acceptTransaction = async (req, res) => {
       let dataJson = JSON.parse(dataStr, config.key2);
       const itemsArray = JSON.parse(dataJson["item"]);
 
-      await OrderController.createOrder(dataJson["app_user"], 'ACCEPTED', itemsArray, itemsArray.length, dataJson["amount"]);
+      await OrderController.createOrder(dataJson["app_user"], 'Accepted', itemsArray, itemsArray.length, dataJson["amount"]);
 
       console.log("update order's status = success where app_trans_id =", dataJson["app_trans_id"]);
 
@@ -89,7 +89,18 @@ const acceptTransaction = async (req, res) => {
   res.json(result);
 };
 
+const handleTransactionByCash = async (req, res) => {
+  const itemsArray = req.body.items;
+
+  await OrderController.createOrder(req.body.userId, 'Pending', itemsArray, itemsArray.length, req.body.amount);
+
+  console.log('create order successufully');
+
+  return res.status(200).json({ message: 'Make order successfully' });
+};
+
 export const PaymentController = {
   handleTransaction,
-  acceptTransaction
+  acceptTransaction,
+  handleTransactionByCash
 };

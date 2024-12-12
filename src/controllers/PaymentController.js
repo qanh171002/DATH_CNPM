@@ -15,11 +15,11 @@ const config = {
   endpoint: env.ENDPOINT
 };
 
-const public_url = "https://3b2e-171-247-146-191.ngrok-free.app";
+const public_url = env.BE_PUBLIC_URL;
 
 const handleTransaction = async (req, res) => {
   const embed_data = {
-    redirecturl: 'http://localhost:3000/status'
+    redirecturl: env.FE_PUBLIC_URL + '/status'
   };
 
   const items = req.body.items || [{}];

@@ -118,5 +118,5 @@ https://greenshop-haloed.vercel.app/
 - [@quochuy](https://github.com/wirxkano)
 - [@xuanhuy](https://github.com/HuyHaloed)
 - [@thanhdat](https://github.com/nighthunter1305)
-- [@quocanh](.....)
+- [@quocanh](https://github.com/qanh171002)
 - [@trongtruong](.....)
